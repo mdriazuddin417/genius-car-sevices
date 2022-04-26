@@ -9,10 +9,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
 import Loading from "../Shared/Loading/Loading";
 import SocialLogIn from "./SocialLogIn/SocialLogIn";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 import PageTitle from "../Shared/PageTitle/PageTitle";
+import axios from "axios";
 
 const Login = () => {
   const emailRef = useRef("");
@@ -26,15 +27,22 @@ const Login = () => {
     useSignInWithEmailAndPassword(auth);
 
   if (user) {
-    navigate(from, { replace: true });
+    // navigate(from, { replace: true });
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
-    signInWithEmailAndPassword(email, password);
+    await signInWithEmailAndPassword(email, password);
+    const { data } = await axios.post(
+      "https://young-coast-37816.herokuapp.com/login",
+      { email }
+    );
+    console.log(data);
+    localStorage.setItem("accessToken", data.accessToken);
+    navigate(from, { replace: true });
   };
   const navigateRegister = (event) => {
     navigate("/register");
@@ -111,7 +119,6 @@ const Login = () => {
       {(loading || sending) && <Loading />}
       {errorElement}
       <SocialLogIn />
-      <ToastContainer />
     </div>
   );
 };
