@@ -14,7 +14,7 @@ const CheckOut = () => {
   const handlePlaceOrder = (e) => {
     e.preventDefault();
     const order = {
-      email: user.email || user?.providerData[0]?.email,
+      email: user.email,
       service: service.name,
       serviceId: serviceId,
       address: e.target.address.value,

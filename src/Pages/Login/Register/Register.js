@@ -13,6 +13,7 @@ import "./Register.css";
 import { ToastContainer, toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
+import useToken from "../../../hooks/useToken";
 const Register = () => {
   const [agree, setAgree] = useState(false);
 
@@ -21,10 +22,16 @@ const Register = () => {
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
 
+  const [token] = useToken(user);
+
   const navigate = useNavigate();
   const navigateLogin = () => {
     navigate("/login");
   };
+
+  if (token) {
+    navigate("/home");
+  }
 
   if (loading || updating) {
     return <Loading />;
@@ -41,7 +48,6 @@ const Register = () => {
     await updateProfile({ displayName: name });
 
     toast("Updated profile");
-    navigate("/home");
   };
 
   return (

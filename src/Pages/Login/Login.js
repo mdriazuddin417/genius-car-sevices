@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageTitle from "../Shared/PageTitle/PageTitle";
 import axios from "axios";
+import useToken from "../../hooks/useToken";
 
 const Login = () => {
   const emailRef = useRef("");
@@ -25,9 +26,10 @@ const Login = () => {
   //Sign in With Email and Password
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
+  const [token] = useToken(user);
 
-  if (user) {
-    // navigate(from, { replace: true });
+  if (token) {
+    navigate(from, { replace: true });
   }
 
   const handleSubmit = async (event) => {
@@ -42,7 +44,6 @@ const Login = () => {
     );
     console.log(data);
     localStorage.setItem("accessToken", data.accessToken);
-    navigate(from, { replace: true });
   };
   const navigateRegister = (event) => {
     navigate("/register");
